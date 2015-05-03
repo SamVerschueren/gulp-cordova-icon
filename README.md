@@ -2,7 +2,7 @@
 
 > Add an icon to your cordova project.
 
-## Installation
+## Installation (not yet available)
 
 ```bash
 npm install --save-dev gulp-cordova-icon
