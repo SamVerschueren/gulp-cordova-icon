@@ -15,10 +15,11 @@ var path = require('path'),
     gm = require('gm'),
     async = require('async'),
     mkdirp = require('mkdirp'),
-    npm = require('npm'),
+    npmi = require('npmi'),
     Q = require('q');
 
-var platforms = require('./platforms.json');
+var platforms = require('./platforms.json'),
+    hookDependencies = ['gm', 'async', 'elementtree'];
 
 module.exports = function(src) {
 
@@ -70,9 +71,20 @@ module.exports = function(src) {
         return deferred.promise;
     }
 
-    function installDependencies() {
-        // TODO install dependencies
-        return Q.resolve();
+    function installHookDependencies() {
+        var deferred = Q.defer();
+
+        async.each(hookDependencies, function(pkg, next) {
+            npmi({name: pkg, path: path.join(process.env.PWD, 'hooks')}, next);
+        }, function(err) {
+            if(err) {
+                return deferred.reject(err);
+            }
+
+            deferred.resolve();
+        });
+
+        return deferred.promise;
     }
 
     function mkdir(dir) {
@@ -98,7 +110,7 @@ module.exports = function(src) {
         Q.all([
             copyIcon(),
             copyHooks(),
-            installDependencies()
+            installHookDependencies()
         ]).then(function() {
             cb();
         }).catch(function(err) {
