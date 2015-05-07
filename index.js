@@ -11,9 +11,41 @@
 var path = require('path'),
     fs = require('fs-extra'),
     through = require('through2'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    gm = require('gm'),
+    async = require('async'),
+    mkdirp = require('mkdirp');
 
-module.exports = function(icon) {
+var platforms = require('./platforms.json');
+
+module.exports = function(src) {
+
+    function generate(dest, done) {
+        async.each(Object.keys(platforms), function(platform, nextPlatform) {
+            var root = path.join(dest, platform);
+
+            async.each(platforms[platform], function(icon, nextIcon) {
+                var dest = path.join(root, icon.file);
+
+                mkdir(path.dirname(dest));
+
+                if(fs.existsSync(path.dirname(dest))) {
+                    gm(src).resize(icon.dimension, icon.dimension).write(dest, nextIcon);
+                }
+                else {
+                    nextIcon();
+                }
+            }, nextPlatform);
+        }, done);
+    }
+
+    function mkdir(dir) {
+        if(!fs.existsSync(dir)) {
+            mkdirp.sync(dir);
+        }
+
+        return dir;
+    }
 
     return through.obj(function(file, enc, cb) {
         // Change the working directory
@@ -21,27 +53,12 @@ module.exports = function(icon) {
 
         cb();
     }, function(cb) {
-        if(!fs.existsSync(icon)) {
+        if(!fs.existsSync(src)) {
             return cb(new gutil.PluginError('gulp-cordova-icon', 'The icon file could not be found.'));
         }
 
-        // TODO check if it is an image
+        // TODO check if the icon is an image
 
-        var dest = path.join(process.env.PWD, 'res');
-
-        if(!fs.existsSync(dest)) {
-            // If the 'res' directory does not exist, create it
-            fs.mkdirSync(dest);
-        }
-
-        // Copy the icon to the res folder
-        fs.copy(icon, path.join(dest, 'icon.png'), function(err) {
-            if(err) {
-                // Return an error if an error occurred
-                return cb(new gutil.PluginError('gulp-cordova-icon', err));
-            }
-
-            cb();
-        });
+        generate(path.join(process.env.PWD, 'res'), cb);
     });
 };
