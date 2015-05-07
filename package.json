@@ -25,5 +25,10 @@
   "bugs": {
     "url": "https://github.com/SamVerschueren/gulp-cordova-icon/issues"
   },
-  "homepage": "https://github.com/SamVerschueren/gulp-cordova-icon"
+  "homepage": "https://github.com/SamVerschueren/gulp-cordova-icon",
+  "dependencies": {
+    "fs-extra": "^0.18.2",
+    "gulp-util": "^3.0.4",
+    "through2": "^0.6.5"
+  }
 }
