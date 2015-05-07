@@ -15,6 +15,7 @@ var path = require('path'),
     gm = require('gm'),
     async = require('async'),
     mkdirp = require('mkdirp'),
+    npm = require('npm'),
     Q = require('q');
 
 var platforms = require('./platforms.json');
@@ -69,6 +70,11 @@ module.exports = function(src) {
         return deferred.promise;
     }
 
+    function installDependencies() {
+        // TODO install dependencies
+        return Q.resolve();
+    }
+
     function mkdir(dir) {
         if(!fs.existsSync(dir)) {
             mkdirp.sync(dir);
@@ -91,7 +97,8 @@ module.exports = function(src) {
 
         Q.all([
             copyIcon(),
-            copyHooks()
+            copyHooks(),
+            installDependencies()
         ]).then(function() {
             cb();
         }).catch(function(err) {
