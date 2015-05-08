@@ -27,10 +27,8 @@ gulp.task('build', function() {
 });
 ```
 
-This plugin will set up everything so that if a platform is build, in this case Android, all the icons will be generated
-for that specific platform and will be copied to the correct location.
-
-The plugin installs a `before_build` hook that will do all the magic.
+When the project is build for a platform, the icon provided will be used as application icon. It will generate all the different sizes
+of the icon and places them in the correct location.
 
 ## API
 
@@ -38,6 +36,7 @@ The plugin installs a `before_build` hook that will do all the magic.
 
 #### file
 
+*Required*  
 Type: `string`
 
 The path to the `png` icon that will be used as application icon.
