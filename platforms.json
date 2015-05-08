@@ -93,14 +93,16 @@
             }
         ]
     },
-    "bb10": [
-        {
-            "file": "icon-86.png",
-            "dimension": 86
-        },
-        {
-            "file": "icon-150.png",
-            "dimension": 150
-        }
-    ]
+    "bb10": {
+        "icons": [
+            {
+                "file": "icon-86.png",
+                "dimension": 86
+            },
+            {
+                "file": "icon-150.png",
+                "dimension": 150
+            }
+        ]
+    }
 }

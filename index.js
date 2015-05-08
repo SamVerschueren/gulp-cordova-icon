@@ -17,10 +17,13 @@ var path = require('path'),
     mkdirp = require('mkdirp'),
     npmi = require('npmi'),
     mime = require('mime-types'),
-    Q = require('q');
+    Q = require('q'),
+    sizeOf = require('image-size'),
+    _ = require('lodash');
 
 var platforms = require('./platforms.json'),
-    hookDependencies = ['gm', 'async', 'elementtree', 'mkdirp'];
+    hookDependencies = ['gm', 'async', 'elementtree', 'mkdirp'],
+    minSize = _.max(_.flatten(_.map(platforms, _.property('icons'))), 'dimension').dimension;
 
 module.exports = function(src) {
 
@@ -110,6 +113,19 @@ module.exports = function(src) {
         if(mime.lookup(src) !== 'image/png') {
             // If the image icon is not a png file, throw an error
             return cb(new gutil.PluginError('gulp-cordova-icon', 'You can only provide a .png image icon.'));
+        }
+
+        // Calculate the size of the image
+        var size = sizeOf(src);
+
+        if(size.width !== size.height) {
+            // Test if the image is a square
+            return cb(new gutil.PluginError('gulp-cordova-icon', 'Please provide a square image.'));
+        }
+
+        if(size.width < minSize) {
+            // Test if the image size is large enough
+            return cb(new gutil.PluginError('gulp-cordova-icon', 'The icon should have at least a dimension of ' + minSize + ' pixels.'));
         }
 
         // Execute all the steps
