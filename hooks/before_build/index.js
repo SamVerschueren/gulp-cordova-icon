@@ -14,6 +14,7 @@ var path = require('path'),
     fs = require('fs'),
     gm = require('gm'),
     async = require('async'),
+    mkdirp = require('mkdirp'),
     et = require('elementtree');
 
 // variables
@@ -71,12 +72,11 @@ function generate(done) {
         async.each(platform.icons, function(icon, next) {
             var dest = path.join(root, icon.file);
 
-            if(fs.existsSync(path.dirname(dest))) {
-                gm(path.join(__dirname, '../../res/icon.png')).resize(icon.dimension, icon.dimension).write(dest, next);
+            if(!fs.existsSync(path.dirname(dest))) {
+                mkdirp.sync(path.dirname(dest));
             }
-            else {
-                next();
-            }
+
+            gm(path.join(__dirname, '../../res/icon.png')).resize(icon.dimension, icon.dimension).write(dest, next);
         }, done);
     });
 }

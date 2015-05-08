@@ -20,7 +20,7 @@ var path = require('path'),
     Q = require('q');
 
 var platforms = require('./platforms.json'),
-    hookDependencies = ['gm', 'async', 'elementtree'];
+    hookDependencies = ['gm', 'async', 'elementtree', 'mkdirp'];
 
 module.exports = function(src) {
 
