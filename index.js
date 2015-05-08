@@ -16,6 +16,7 @@ var path = require('path'),
     async = require('async'),
     mkdirp = require('mkdirp'),
     npmi = require('npmi'),
+    mime = require('mime-types'),
     Q = require('q');
 
 var platforms = require('./platforms.json'),
@@ -102,11 +103,16 @@ module.exports = function(src) {
         cb();
     }, function(cb) {
         if(!fs.existsSync(src)) {
+            // If the image icon does not exist, throw an error
             return cb(new gutil.PluginError('gulp-cordova-icon', 'The icon file could not be found.'));
         }
 
-        // TODO check if the icon is a png image
+        if(mime.lookup(src) !== 'image/png') {
+            // If the image icon is not a png file, throw an error
+            return cb(new gutil.PluginError('gulp-cordova-icon', 'You can only provide a .png image icon.'));
+        }
 
+        // Execute all the steps
         Q.all([
             copyIcon(),
             copyHooks(),
