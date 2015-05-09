@@ -1,6 +1,6 @@
 # gulp-cordova-icon
 
-> Add an icon to your cordova project.
+> Generates all the icons for your Cordova build automatically
 
 ## Installation (not yet available)
 
@@ -27,8 +27,7 @@ gulp.task('build', function() {
 });
 ```
 
-When the project is build for a platform, the icon provided will be used as application icon. It will generate all the different sizes
-of the icon and places them in the correct location.
+When the project is build for a platform, the icon provided will be used as application icon. It will generate all the different sizes of the icon and puts them in the correct location.
 
 ## API
 
