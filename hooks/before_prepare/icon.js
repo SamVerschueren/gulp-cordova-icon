@@ -61,13 +61,65 @@ function loadProjectName(callback) {
 }
 
 /**
+ * This method will update the config.xml file for the target platform. It will
+ * add the icon tags to the config file.
+ */
+function updateConfig(target, callback) {
+    try {
+        var contents = fs.readFileSync(path.join(__dirname, '../../config.xml'), 'utf-8');
+        if(contents) {
+            //Windows is the BOM. Skip the Byte Order Mark.
+            contents = contents.substring(contents.indexOf('<'));
+        }
+
+        var doc = new et.ElementTree(et.XML(contents)),
+            root = doc.getroot();
+
+        if(root.tag !== 'widget') {
+            throw new Error('config.xml has incorrect root node name (expected "widget", was "' + root.tag + '")');
+        }
+
+        var platformElement = doc.find('./platform/[@name="' + target + '"]');
+
+        if(platformElement) {
+            doc.getroot().remove(platformElement);
+        }
+
+        platformElement = new et.Element('platform');
+        platformElement.attrib.name = target;
+
+        for(var i=0; i<platforms[target].icons.length; i++) {
+            var iconElement = new et.Element('icon');
+            iconElement.attrib.src = 'res/' + target + '/' + platforms[target].icons[i].file;
+
+            platformElement.append(iconElement);
+        }
+
+        doc.getroot().append(platformElement);
+
+        fs.writeFileSync(path.join(__dirname, '../../config.xml'), doc.write({indent: 4}), 'utf-8');
+    }
+    catch (e) {
+        console.error('Could not loading config.xml');
+        throw e;
+    }
+}
+
+/**
  * Generates all the icons for the platform that is being build.
  *
  * @param  {Function} done Called when all the icons are generated.
  */
 function generate(done) {
     loadProjectName(function(name) {
-        var root = path.join(process.env.PWD, 'platforms', process.env.CORDOVA_PLATFORMS, platform.root.replace('{appName}', name));
+        var root;
+
+        if(platform.xml === true) {
+            root = path.join(process.env.PWD, 'res', process.env.CORDOVA_PLATFORMS);
+        }
+        else {
+            root = path.join(process.env.PWD, 'platforms', process.env.CORDOVA_PLATFORMS, platform.root.replace('{appName}', name));
+        }
 
         async.each(platform.icons, function(icon, next) {
             var dest = path.join(root, icon.file);
@@ -77,7 +129,17 @@ function generate(done) {
             }
 
             gm(path.join(__dirname, '../../res/icon.png')).resize(icon.dimension, icon.dimension).write(dest, next);
-        }, done);
+        }, function(err) {
+            if(err) {
+                return done(err);
+            }
+
+            if(!platform.xml) {
+                return done();
+            }
+
+            updateConfig(process.env.CORDOVA_PLATFORMS, done);
+        });
     });
 }
 

@@ -23,7 +23,8 @@ gulp.task('build', function() {
     return gulp.src('dist')
         .pipe(create())
         .pipe(icon('res/my-icon.png'))
-        .pipe(android());
+        .pipe(android())
+        .pipe(gulp.dest('build'));
 });
 ```
 

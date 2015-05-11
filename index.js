@@ -25,30 +25,43 @@ var platforms = require('./platforms.json'),
     hookDependencies = ['gm', 'async', 'elementtree', 'mkdirp'],
     minSize = _.max(_.flatten(_.map(platforms, _.property('icons'))), 'dimension').dimension;
 
+// export the module
 module.exports = function(src) {
 
+    /**
+     * Copy the icon to the res subdirectory of the cordova build.
+     */
     function copyIcon() {
         var deferred = Q.defer(),
             dest = path.join(process.env.PWD, 'res');
 
+        // Make sure the destination exists
         mkdir(dest);
 
+        // Start copying
         fs.copy(src, path.join(dest, 'icon.png'), function(err) {
             if(err) {
+                // Reject if an error occurred
                 return deferred.reject(err);
             }
 
+            // Resolve
             deferred.resolve();
         });
 
         return deferred.promise;
     }
 
+    /**
+     * Copy all the hooks in the `hooks` directory to the `hooks` directory
+     * of the cordova project.
+     */
     function copyHooks() {
         var deferred = Q.defer(),
             src = path.join(__dirname, 'hooks'),
             dest = path.join(process.env.PWD, 'hooks');
 
+        // Copy the platforms.json file that describes the icons
         fs.copySync(path.join(__dirname, 'platforms.json'), path.join(dest, 'platforms.json'));
 
         // Copy all the hooks from the hooks directory
@@ -75,6 +88,9 @@ module.exports = function(src) {
         return deferred.promise;
     }
 
+    /**
+     * Install all the dependencies that are used by the hooks.
+     */
     function installHookDependencies() {
         var deferred = Q.defer();
 
@@ -91,6 +107,10 @@ module.exports = function(src) {
         return deferred.promise;
     }
 
+    /**
+     * Conditional mkdir. If the file does not exist, it will create the directory, otherwise
+     * it will not create the directory.
+     */
     function mkdir(dir) {
         if(!fs.existsSync(dir)) {
             mkdirp.sync(dir);
