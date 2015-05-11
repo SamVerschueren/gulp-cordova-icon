@@ -2,7 +2,7 @@
 
 > Generates all the icons for your Cordova build automatically
 
-## Installation (not yet available)
+## Installation
 
 ```bash
 npm install --save-dev gulp-cordova-icon
