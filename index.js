@@ -122,6 +122,8 @@ module.exports = function(src) {
     return through.obj(function(file, enc, cb) {
         // Change the working directory
         process.env.PWD = file.path;
+        
+        this.push(file);
 
         cb();
     }, function(cb) {
