@@ -81,13 +81,25 @@ function updateConfig(target, callback) {
 
         var platformElement = doc.find('./platform/[@name="' + target + '"]');
 
-        if(platformElement) {
-            doc.getroot().remove(platformElement);
+        if(platformElement) {            
+            // Find all the child icon elements
+            var icons = platformElement.findall('./icon');
+            
+            // Remove all the icons in the platform element
+            icons.forEach(function(icon) {
+                platformElement.remove(icon);    
+            });
+        }
+        else {
+            // Create a new element if no element was found
+            platformElement = new et.Element('platform');
+            platformElement.attrib.name = target;
+            
+            // Only append the element if it does not yet exist
+            doc.getroot().append(platformElement);
         }
 
-        platformElement = new et.Element('platform');
-        platformElement.attrib.name = target;
-
+        // Add all the icons
         for(var i=0; i<platforms[target].icons.length; i++) {
             var iconElement = new et.Element('icon');
             iconElement.attrib.src = 'res/' + target + '/' + platforms[target].icons[i].file;
@@ -95,9 +107,10 @@ function updateConfig(target, callback) {
             platformElement.append(iconElement);
         }
 
-        doc.getroot().append(platformElement);
-
+        // Write the file
         fs.writeFileSync(path.join(__dirname, '../../config.xml'), doc.write({indent: 4}), 'utf-8');
+        
+        callback();
     }
     catch (e) {
         console.error('Could not loading config.xml');
