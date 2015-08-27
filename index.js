@@ -28,6 +28,8 @@ var platforms = require('./platforms.json'),
 // export the module
 module.exports = function(src) {
 
+    var mimetype = mime.lookup(src);
+
     /**
      * Copy the icon to the res subdirectory of the cordova build.
      */
@@ -39,7 +41,7 @@ module.exports = function(src) {
         mkdir(dest);
 
         // Start copying
-        fs.copy(src, path.join(dest, 'icon.png'), function(err) {
+        fs.copy(src, path.join(dest, 'icon.' + mime.extension(mimetype)), function(err) {
             if(err) {
                 // Reject if an error occurred
                 return deferred.reject(err);
@@ -132,9 +134,9 @@ module.exports = function(src) {
             return cb(new gutil.PluginError('gulp-cordova-icon', 'The icon file could not be found.'));
         }
 
-        if(mime.lookup(src) !== 'image/png') {
+        if(mimetype.indexOf('image/png') !== 0 && mimetype.indexOf('image/svg') !== 0) {
             // If the image icon is not a png file, throw an error
-            return cb(new gutil.PluginError('gulp-cordova-icon', 'You can only provide a .png image icon.'));
+            return cb(new gutil.PluginError('gulp-cordova-icon', 'You can only provide a .png or .svg image icon.'));
         }
 
         // Calculate the size of the image
