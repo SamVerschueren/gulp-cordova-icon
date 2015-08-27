@@ -30,6 +30,12 @@ gulp.task('build', function() {
 
 When the project is build for a platform, the icon provided will be used as application icon. It will generate all the different sizes of the icon and puts them in the correct location.
 
+### Icons
+
+The plugin accepts two icon formats, `png` and `svg`. When providing an `svg` image icon, the size of the icon does not matter. If you provide a `png` icon, the size of the icon should be
+at least the size of the largest image that should be generated. This depends on the platform you are building for. If the image is to small, the plugin will throw an error indicating
+that you should upload a larger icon.
+
 ## API
 
 ### icon(file)
@@ -39,7 +45,7 @@ When the project is build for a platform, the icon provided will be used as appl
 *Required*  
 Type: `string`
 
-The path to the `png` icon that will be used as application icon.
+The path to the `png` or `svg` icon that will be used as application icon.
 
 ## Related
 
