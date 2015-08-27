@@ -13,7 +13,7 @@ one of those.
 
 ## Usage
 
-```JavaScript
+```javascript
 var gulp = require('gulp'),
     create = require('gulp-cordova-create'),
     icon = require('gulp-cordova-icon'),
