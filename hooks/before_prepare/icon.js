@@ -128,12 +128,22 @@ function generate(done) {
         var root;
 
         if(platform.xml === true) {
+            // This is a platform that uses config.xml to set the icons
             root = path.join(process.env.PWD, 'res', process.env.CORDOVA_PLATFORMS);
         }
         else {
+            // This means we should overwrite the items at the platform root
             root = path.join(process.env.PWD, 'platforms', process.env.CORDOVA_PLATFORMS, platform.root.replace('{appName}', name));
         }
-
+        
+        // Default, the icon is a PNG image
+        var source = path.join(__dirname, '../../res/icon.png');
+            
+        if(!fs.existsSync(source)) {
+            // If the PNG image does not exist, it means it is an SVG image
+            source = path.join(__dirname, '../../res/icon.svg');;
+        }
+        
         async.each(platform.icons, function(icon, next) {
             var dest = path.join(root, icon.file);
 
@@ -141,7 +151,7 @@ function generate(done) {
                 mkdirp.sync(path.dirname(dest));
             }
 
-            gm(path.join(__dirname, '../../res/icon.png')).resize(icon.dimension, icon.dimension).write(dest, next);
+            gm(source).density(icon.dimension, icon.dimension).write(dest, next);
         }, function(err) {
             if(err) {
                 return done(err);
