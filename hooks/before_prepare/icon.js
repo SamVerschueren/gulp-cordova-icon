@@ -138,12 +138,12 @@ function generate(done) {
         
         // Default, the icon is a PNG image
         var source = path.join(__dirname, '../../res/icon.png');
-            
+
         if(!fs.existsSync(source)) {
             // If the PNG image does not exist, it means it is an SVG image
-            source = path.join(__dirname, '../../res/icon.svg');;
+            source = path.join(__dirname, '../../res/icon.svg');
         }
-        
+
         async.each(platform.icons, function(icon, next) {
             var dest = path.join(root, icon.file);
 
@@ -151,7 +151,15 @@ function generate(done) {
                 mkdirp.sync(path.dirname(dest));
             }
 
-            gm(source).density(icon.dimension, icon.dimension).write(dest, next);
+            gm(source).density(icon.dimension, icon.dimension).write(dest, function(err){
+                if(!err){
+                    next();
+                }
+                else {
+                    throw err;
+                }
+            });
+
         }, function(err) {
             if(err) {
                 return done(err);
