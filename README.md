@@ -32,7 +32,7 @@ When the project is build for a platform, the icon provided will be used as appl
 
 ## API
 
-### icon(file)
+### icon(file, options)
 
 #### file
 
@@ -40,6 +40,20 @@ When the project is build for a platform, the icon provided will be used as appl
 Type: `string`
 
 The path to the `png` or `svg` icon that will be used as application icon.
+
+#### options
+*Optional*
+Type: `object`
+
+##### errorHandlingStrategy
+*Optional*
+Type: `string`
+Defaults to : `lenient`
+
+The error handling strategy of the process. This field has 3 possible values:
+* `lenient`, the default one : any encountered error is silently discarded and the build continues
+* `warn` : any encountered error is logged as a warning on the console
+* `throw` : any encountered error is thrown and interrupts the Gulp stream
 
 ## Related
 
