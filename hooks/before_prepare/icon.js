@@ -151,15 +151,7 @@ function generate(done) {
                 mkdirp.sync(path.dirname(dest));
             }
 
-            gm(source).density(icon.dimension, icon.dimension).write(dest, function(err){
-                if(!err){
-                    next();
-                }
-                else {
-                    throw err;
-                }
-            });
-
+            gm(source).density(icon.dimension, icon.dimension).write(dest, next);
         }, function(err) {
             if(err) {
                 return done(err);
