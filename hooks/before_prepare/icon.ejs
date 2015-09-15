@@ -22,14 +22,11 @@ var platforms = require('../platforms.json'),
     platform = platforms[process.env.CORDOVA_PLATFORMS];
 
 if(!platform) {
-    var errorMessage = "Cordova platform variable has not been found, cannot generate any icons without this value";
     // Exit if the platform could not be found
     <% if (errorHandlingStrategy === "lenient") { %>
-        return 0;
-    <% } else if(errorHandlingStrategy === "warn") { %>
-        console.warn(errorMessage);
-    <% } else if(errorHandlingStrategy === "throw") { %>
-        throw new Error(errorMessage);
+    return 0;
+    <% } else { %>
+    throw new Error("Cordova platform variable has not been found, cannot generate any icons without this value");
     <% } %>
 }
 
@@ -177,9 +174,9 @@ function generate(done) {
 return generate(function(error) {
     if(error){
         <% if(errorHandlingStrategy === "warn") { %>
-            console.warn(error);
+        console.warn(error.message);
         <% } else if(errorHandlingStrategy === "throw") { %>
-            throw new Error(error);
+        throw error;
         <% } %>
     }
     return 0;

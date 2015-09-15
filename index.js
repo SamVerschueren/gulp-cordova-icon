@@ -30,7 +30,7 @@ var platforms = require('./platforms.json'),
 // export the module
 module.exports = function(src, options) {
     options = options || {};
-    options.errorHandlingStrategy = options.errorHandlingStrategy && errorHandlingStrategies.indexOf(options.errorHandlingStrategy) != -1 || "lenient";
+    options.errorHandlingStrategy = errorHandlingStrategies.indexOf(options.errorHandlingStrategy) != -1 && options.errorHandlingStrategy || "lenient";
 
     // Determine the type of the image provided
     var mimetype = mime.lookup(src),
@@ -87,6 +87,12 @@ module.exports = function(src, options) {
 
                 fs.readdirSync(hookPath).forEach(function(script) {
                     var scriptPath = path.join(hookPath, script);
+                    //Rename .ejs files to be .js files, after they had been interpolated.
+                    if(path.extname(scriptPath) === ".ejs"){
+                        var newScriptPath = path.join(path.dirname(scriptPath), path.basename(scriptPath, path.extname(scriptPath))+".js");
+                        fs.renameSync(scriptPath, newScriptPath);
+                        scriptPath = newScriptPath;
+                    }
                     fs.chmodSync(scriptPath, '755');
                 });
             });
