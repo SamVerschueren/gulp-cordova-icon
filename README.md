@@ -62,6 +62,7 @@ See [`gulp-cordova`](https://github.com/SamVerschueren/gulp-cordova) for the ful
 ## Contributors
 
 - Sam Verschueren [<sam.verschueren@gmail.com>]
+- Vincent Vieira [<vincent.vieira@supinfo.com>]
 
 ## License
 
