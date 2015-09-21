@@ -42,12 +42,12 @@ Type: `string`
 The path to the `png` or `svg` icon that will be used as application icon.
 
 #### options
-*Optional*
+
 Type: `object`
 
 ##### errorHandlingStrategy
-*Optional*
-Type: `string`
+
+Type: `string`  
 Defaults to : `lenient`
 
 The error handling strategy of the process. This field has 3 possible values:
