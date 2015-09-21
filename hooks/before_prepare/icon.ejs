@@ -23,7 +23,11 @@ var platforms = require('../platforms.json'),
 
 if(!platform) {
     // Exit if the platform could not be found
+    <% if (errorHandlingStrategy === "lenient") { %>
     return 0;
+    <% } else { %>
+    throw new Error("Cordova platform variable has not been found, cannot generate any icons without this value");
+    <% } %>
 }
 
 /**
@@ -138,12 +142,12 @@ function generate(done) {
         
         // Default, the icon is a PNG image
         var source = path.join(__dirname, '../../res/icon.png');
-            
+
         if(!fs.existsSync(source)) {
             // If the PNG image does not exist, it means it is an SVG image
-            source = path.join(__dirname, '../../res/icon.svg');;
+            source = path.join(__dirname, '../../res/icon.svg');
         }
-        
+
         async.each(platform.icons, function(icon, next) {
             var dest = path.join(root, icon.file);
 
@@ -167,7 +171,13 @@ function generate(done) {
 }
 
 // Start generating
-return generate(function() {
-    // Just exit, regarding of what happened
+return generate(function(error) {
+    if(error){
+        <% if(errorHandlingStrategy === "warn") { %>
+        console.warn(error.message);
+        <% } else if(errorHandlingStrategy === "throw") { %>
+        throw error;
+        <% } %>
+    }
     return 0;
 });

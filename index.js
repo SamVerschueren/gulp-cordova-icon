@@ -19,14 +19,18 @@ var path = require('path'),
     mime = require('mime-types'),
     Q = require('q'),
     sizeOf = require('image-size'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    memFsEditor = require('mem-fs-editor').create(require('mem-fs').create());
 
 var platforms = require('./platforms.json'),
     hookDependencies = ['gm', 'async', 'elementtree', 'mkdirp'],
-    minSize = _.max(_.flatten(_.map(platforms, _.property('icons'))), 'dimension').dimension;
+    minSize = _.max(_.flatten(_.map(platforms, _.property('icons'))), 'dimension').dimension,
+    errorHandlingStrategies = ["lenient", "warn", "throw"];
 
 // export the module
-module.exports = function(src) {
+module.exports = function(src, options) {
+    options = options || {};
+    options.errorHandlingStrategy = errorHandlingStrategies.indexOf(options.errorHandlingStrategy) != -1 && options.errorHandlingStrategy || "lenient";
 
     // Determine the type of the image provided
     var mimetype = mime.lookup(src),
@@ -70,19 +74,25 @@ module.exports = function(src) {
         fs.copySync(path.join(__dirname, 'platforms.json'), path.join(dest, 'platforms.json'));
 
         // Copy all the hooks from the hooks directory
-        fs.copy(src, dest, function(err) {
+        memFsEditor.copyTpl(src, dest, options);
+        memFsEditor.commit(function(err) {
             if(err) {
                 // Stop execution if an error occurred
                 return deferred.reject(err);
             }
 
-            // Mak all the scripts executable in the cordova project
+            // Make all the scripts executable in the Cordova project
             fs.readdirSync(src).forEach(function(hook) {
                 var hookPath = path.join(dest, hook);
 
                 fs.readdirSync(hookPath).forEach(function(script) {
                     var scriptPath = path.join(hookPath, script);
-
+                    //Rename .ejs files to be .js files, after they had been interpolated.
+                    if(path.extname(scriptPath) === ".ejs"){
+                        var newScriptPath = path.join(path.dirname(scriptPath), path.basename(scriptPath, path.extname(scriptPath))+".js");
+                        fs.renameSync(scriptPath, newScriptPath);
+                        scriptPath = newScriptPath;
+                    }
                     fs.chmodSync(scriptPath, '755');
                 });
             });
