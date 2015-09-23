@@ -47,7 +47,7 @@ Type: `object`
 
 ##### errorHandlingStrategy
 
-Type: `string`
+Type: `string`  
 Defaults to : `lenient`
 
 The error handling strategy of the process. This field has 3 possible values:
