@@ -32,11 +32,11 @@ When the project is build for a platform, the icon provided will be used as appl
 
 ## API
 
-### icon(file, options)
+### icon(file [, options])
 
 #### file
 
-*Required*  
+*Required*
 Type: `string`
 
 The path to the `png` or `svg` icon that will be used as application icon.
@@ -47,7 +47,7 @@ Type: `object`
 
 ##### errorHandlingStrategy
 
-Type: `string`  
+Type: `string`
 Defaults to : `lenient`
 
 The error handling strategy of the process. This field has 3 possible values:

@@ -23,7 +23,7 @@ var platforms = require('../platforms.json'),
 
 if(!platform) {
     // Exit if the platform could not be found
-    <% if (errorHandlingStrategy === "lenient") { %>
+    <% if (errorHandlingStrategy === 'lenient') { %>
     return 0;
     <% } else { %>
     throw new Error('This platform is not supported by gulp-cordova-icon.');
@@ -85,20 +85,20 @@ function updateConfig(target, callback) {
 
         var platformElement = doc.find('./platform/[@name="' + target + '"]');
 
-        if(platformElement) {            
+        if(platformElement) {
             // Find all the child icon elements
             var icons = platformElement.findall('./icon');
-            
+
             // Remove all the icons in the platform element
             icons.forEach(function(icon) {
-                platformElement.remove(icon);    
+                platformElement.remove(icon);
             });
         }
         else {
             // Create a new element if no element was found
             platformElement = new et.Element('platform');
             platformElement.attrib.name = target;
-            
+
             // Only append the element if it does not yet exist
             doc.getroot().append(platformElement);
         }
@@ -113,7 +113,7 @@ function updateConfig(target, callback) {
 
         // Write the file
         fs.writeFileSync(path.join(__dirname, '../../config.xml'), doc.write({indent: 4}), 'utf-8');
-        
+
         callback();
     }
     catch (e) {
@@ -139,7 +139,7 @@ function generate(done) {
             // This means we should overwrite the items at the platform root
             root = path.join(process.env.PWD, 'platforms', process.env.CORDOVA_PLATFORMS, platform.root.replace('{appName}', name));
         }
-        
+
         // Default, the icon is a PNG image
         var source = path.join(__dirname, '../../res/icon.png');
 
@@ -171,11 +171,11 @@ function generate(done) {
 }
 
 // Start generating
-return generate(function(error) {
-    if(error){
-        <% if(errorHandlingStrategy === "warn") { %>
+return generate(function(err) {
+    if(err) {
+        <% if(errorHandlingStrategy === 'warn') { %>
         console.warn(error.message);
-        <% } else if(errorHandlingStrategy === "throw") { %>
+        <% } else if(errorHandlingStrategy === 'throw') { %>
         throw error;
         <% } %>
     }

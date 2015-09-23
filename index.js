@@ -25,12 +25,12 @@ var path = require('path'),
 var platforms = require('./platforms.json'),
     hookDependencies = ['gm', 'async', 'elementtree', 'mkdirp'],
     minSize = _.max(_.flatten(_.map(platforms, _.property('icons'))), 'dimension').dimension,
-    errorHandlingStrategies = ["lenient", "warn", "throw"];
+    errorHandlingStrategies = ['lenient', 'warn', 'throw'];
 
 // export the module
 module.exports = function(src, options) {
     options = options || {};
-    options.errorHandlingStrategy = errorHandlingStrategies.indexOf(options.errorHandlingStrategy) != -1 && options.errorHandlingStrategy || "lenient";
+    options.errorHandlingStrategy = errorHandlingStrategies.indexOf(options.errorHandlingStrategy) != -1 && options.errorHandlingStrategy || errorHandlingStrategies[0];
 
     // Determine the type of the image provided
     var mimetype = mime.lookup(src),
@@ -87,12 +87,7 @@ module.exports = function(src, options) {
 
                 fs.readdirSync(hookPath).forEach(function(script) {
                     var scriptPath = path.join(hookPath, script);
-                    //Rename .ejs files to be .js files, after they had been interpolated.
-                    if(path.extname(scriptPath) === ".ejs"){
-                        var newScriptPath = path.join(path.dirname(scriptPath), path.basename(scriptPath, path.extname(scriptPath))+".js");
-                        fs.renameSync(scriptPath, newScriptPath);
-                        scriptPath = newScriptPath;
-                    }
+
                     fs.chmodSync(scriptPath, '755');
                 });
             });
@@ -137,7 +132,7 @@ module.exports = function(src, options) {
     return through.obj(function(file, enc, cb) {
         // Change the working directory
         process.env.PWD = file.path;
-        
+
         this.push(file);
 
         cb();
