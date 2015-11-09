@@ -176,7 +176,7 @@ return generate(function(err) {
         <% if(errorHandlingStrategy === 'warn') { %>
         console.warn(error.message);
         <% } else if(errorHandlingStrategy === 'throw') { %>
-        throw error;
+        throw err;
         <% } %>
     }
     return 0;
