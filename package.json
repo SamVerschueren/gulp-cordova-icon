@@ -2,13 +2,22 @@
   "name": "gulp-cordova-icon",
   "version": "0.2.0",
   "description": "Add an icon to your cordova project.",
+  "license": "MIT",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": {
+    "name": "Sam Verschueren",
+    "email": "sam.verschueren@gmail.com"
   },
+  "homepage": "https://github.com/SamVerschueren/gulp-cordova-icon",
   "repository": {
     "type": "git",
     "url": "https://github.com/SamVerschueren/gulp-cordova-icon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SamVerschueren/gulp-cordova-icon/issues"
+  },
+  "scripts": {
+    "test": "xo"
   },
   "keywords": [
     "gulp",
@@ -17,19 +26,13 @@
     "icon",
     "gulp-cordova"
   ],
-  "author": {
-    "name": "Sam Verschueren",
-    "email": "sam.verschueren@gmail.com"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/SamVerschueren/gulp-cordova-icon/issues"
-  },
-  "homepage": "https://github.com/SamVerschueren/gulp-cordova-icon",
+  "files": [
+    "index.js",
+    "platforms.json",
+    "hooks"
+  ],
   "dependencies": {
-    "async": "^1.5.0",
     "fs-extra": "^0.26.2",
-    "gm": "^1.17.0",
     "gulp-util": "^3.0.4",
     "image-size": "^0.3.5",
     "lodash": "^3.8.0",
@@ -38,7 +41,11 @@
     "mime-types": "^2.0.11",
     "mkdirp": "^0.5.0",
     "npmi": "^1.0.1",
-    "q": "^1.3.0",
+    "pify": "^2.3.0",
+    "pinkie-promise": "^2.0.0",
     "through2": "^2.0.0"
+  },
+  "devDependencies": {
+    "xo": "*"
   }
 }

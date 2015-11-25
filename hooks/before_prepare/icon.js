@@ -1,33 +1,24 @@
 #!/usr/bin/env node
 'use strict';
-
-/**
- * This hook is ran before the build proces and generates all the icons
- * for the platform that is being build.
- *
- * @author Sam Verschueren
- * @since  7 May 2015
- */
-
-// module dependencies
-var path = require('path'),
-    fs = require('fs'),
-    gm = require('gm'),
-    async = require('async'),
-    mkdirp = require('mkdirp'),
-    et = require('elementtree');
+var path = require('path');
+var fs = require('fs');
+var gm = require('gm');
+var pify = require('pify');
+var Promise = require('pinkie-promise');
+var mkdirp = require('mkdirp');
+var et = require('elementtree');
 
 // variables
-var platforms = require('../platforms.json'),
-    platform = platforms[process.env.CORDOVA_PLATFORMS];
+var platforms = require('../platforms.json');
+var platform = platforms[process.env.CORDOVA_PLATFORMS];
 
-if(!platform) {
-    // Exit if the platform could not be found
-    <% if (errorHandlingStrategy === 'lenient') { %>
-    return 0;
-    <% } else { %>
-    throw new Error('This platform is not supported by gulp-cordova-icon.');
-    <% } %>
+if (!platform) {
+	// Exit if the platform could not be found
+	<% if (errorHandlingStrategy === 'lenient') { %>
+	return 0;
+	<% } else { %>
+	throw new Error('This platform is not supported by gulp-cordova-icon.');
+	<% } %>
 }
 
 /**
@@ -36,148 +27,123 @@ if(!platform) {
  * @param {Function} callback Called when the name is retrieved.
  */
 function loadProjectName(callback) {
-    try {
-        var contents = fs.readFileSync(path.join(__dirname, '../../config.xml'), 'utf-8');
-        if(contents) {
-            //Windows is the BOM. Skip the Byte Order Mark.
-            contents = contents.substring(contents.indexOf('<'));
-        }
+	try {
+		var contents = fs.readFileSync(path.join(__dirname, '../../config.xml'), 'utf-8');
+		if (contents) {
+			// Windows is the BOM. Skip the Byte Order Mark.
+			contents = contents.substring(contents.indexOf('<'));
+		}
 
-        var doc = new et.ElementTree(et.XML(contents)),
-            root = doc.getroot();
+		var doc = new et.ElementTree(et.XML(contents));
+		var root = doc.getroot();
 
-        if(root.tag !== 'widget') {
-            throw new Error('config.xml has incorrect root node name (expected "widget", was "' + root.tag + '")');
-        }
+		if (root.tag !== 'widget') {
+			throw new Error('config.xml has incorrect root node name (expected "widget", was "' + root.tag + '")');
+		}
 
-        var tag = root.find('./name');
+		var tag = root.find('./name');
 
-        if(!tag) {
-            throw new Error('config.xml has no name tag.');
-        }
+		if (!tag) {
+			throw new Error('config.xml has no name tag.');
+		}
 
-        callback(tag.text);
-    }
-    catch (e) {
-        console.error('Could not loading config.xml');
-        throw e;
-    }
+		return tag.text;
+	} catch (e) {
+		console.error('Could not loading config.xml');
+		throw e;
+	}
 }
 
 /**
  * This method will update the config.xml file for the target platform. It will
  * add the icon tags to the config file.
  */
-function updateConfig(target, callback) {
-    try {
-        var contents = fs.readFileSync(path.join(__dirname, '../../config.xml'), 'utf-8');
-        if(contents) {
-            //Windows is the BOM. Skip the Byte Order Mark.
-            contents = contents.substring(contents.indexOf('<'));
-        }
+function updateConfig(target) {
+	try {
+		var contents = fs.readFileSync(path.join(__dirname, '../../config.xml'), 'utf-8');
+		if (contents) {
+			// Windows is the BOM. Skip the Byte Order Mark.
+			contents = contents.substring(contents.indexOf('<'));
+		}
 
-        var doc = new et.ElementTree(et.XML(contents)),
-            root = doc.getroot();
+		var doc = new et.ElementTree(et.XML(contents));
+		var root = doc.getroot();
 
-        if(root.tag !== 'widget') {
-            throw new Error('config.xml has incorrect root node name (expected "widget", was "' + root.tag + '")');
-        }
+		if (root.tag !== 'widget') {
+			throw new Error('config.xml has incorrect root node name (expected "widget", was "' + root.tag + '")');
+		}
 
-        var platformElement = doc.find('./platform/[@name="' + target + '"]');
+		var platformElement = doc.find('./platform/[@name="' + target + '"]');
 
-        if(platformElement) {
-            // Find all the child icon elements
-            var icons = platformElement.findall('./icon');
+		if (platformElement) {
+			platformElement.findall('./icon').forEach(platformElement.remove);
+		} else {
+			platformElement = new et.Element('platform');
+			platformElement.attrib.name = target;
 
-            // Remove all the icons in the platform element
-            icons.forEach(function(icon) {
-                platformElement.remove(icon);
-            });
-        }
-        else {
-            // Create a new element if no element was found
-            platformElement = new et.Element('platform');
-            platformElement.attrib.name = target;
+			doc.getroot().append(platformElement);
+		}
 
-            // Only append the element if it does not yet exist
-            doc.getroot().append(platformElement);
-        }
+		// Add all the icons
+		for(var i=0; i<platforms[target].icons.length; i++) {
+			var iconElement = new et.Element('icon');
+			iconElement.attrib.src = 'res/' + target + '/' + platforms[target].icons[i].file;
 
-        // Add all the icons
-        for(var i=0; i<platforms[target].icons.length; i++) {
-            var iconElement = new et.Element('icon');
-            iconElement.attrib.src = 'res/' + target + '/' + platforms[target].icons[i].file;
+			platformElement.append(iconElement);
+		}
 
-            platformElement.append(iconElement);
-        }
-
-        // Write the file
-        fs.writeFileSync(path.join(__dirname, '../../config.xml'), doc.write({indent: 4}), 'utf-8');
-
-        callback();
-    }
-    catch (e) {
-        console.error('Could not loading config.xml');
-        throw e;
-    }
+		fs.writeFileSync(path.join(__dirname, '../../config.xml'), doc.write({indent: 4}), 'utf-8');
+	} catch (e) {
+		console.error('Could not load config.xml');
+		throw e;
+	}
 }
 
-/**
- * Generates all the icons for the platform that is being build.
- *
- * @param  {Function} done Called when all the icons are generated.
- */
-function generate(done) {
-    loadProjectName(function(name) {
-        var root;
+function generate() {
+	var projectName = loadProjectName();
+	var root;
 
-        if(platform.xml === true) {
-            // This is a platform that uses config.xml to set the icons
-            root = path.join(process.env.PWD, 'res', process.env.CORDOVA_PLATFORMS);
-        }
-        else {
-            // This means we should overwrite the items at the platform root
-            root = path.join(process.env.PWD, 'platforms', process.env.CORDOVA_PLATFORMS, platform.root.replace('{appName}', name));
-        }
+	if (platform.xml === true) {
+		// This is a platform that uses config.xml to set the icons
+		root = path.join(process.env.PWD, 'res', process.env.CORDOVA_PLATFORMS);
+	} else {
+		// This means we should overwrite the items at the platform root
+		root = path.join(process.env.PWD, 'platforms', process.env.CORDOVA_PLATFORMS, platform.root.replace('{appName}', projectName));
+	}
 
-        // Default, the icon is a PNG image
-        var source = path.join(__dirname, '../../res/icon.png');
+	// Default, the icon is a PNG image
+	var source = path.join(__dirname, '../../res/icon.png');
+	var fn = 'resize';
 
-        if(!fs.existsSync(source)) {
-            // If the PNG image does not exist, it means it is an SVG image
-            source = path.join(__dirname, '../../res/icon.svg');
-        }
+	if (!fs.existsSync(source)) {
+		// If the PNG image does not exist, it means it is an SVG image
+		source = path.join(__dirname, '../../res/icon.svg');
+		fn = 'density';
+	}
 
-        async.each(platform.icons, function(icon, next) {
-            var dest = path.join(root, icon.file);
+	return Promise.all(platform.icons.forEach(function (icon) {
+		var dest = path.join(root, icon.file);
 
-            if(!fs.existsSync(path.dirname(dest))) {
-                mkdirp.sync(path.dirname(dest));
-            }
+		if (!fs.existsSync(path.dirname(dest))) {
+			mkdirp.sync(path.dirname(dest));
+		}
 
-            gm(source).density(icon.dimension, icon.dimension).write(dest, next);
-        }, function(err) {
-            if(err) {
-                return done(err);
-            }
+		var image = gm(source)[fn](icon.dimension, icon.dimension);
 
-            if(!platform.xml) {
-                return done();
-            }
-
-            updateConfig(process.env.CORDOVA_PLATFORMS, done);
-        });
-    });
+		return pify(image.write.bind(image), Promise)(dest);
+	})).then(function () {
+		if (platform.xml) {
+			updateConfig(process.env.CORDOVA_PLATFORMS);
+		}
+	});
 }
 
-// Start generating
-return generate(function(err) {
-    if(err) {
-        <% if(errorHandlingStrategy === 'warn') { %>
-        console.warn(error.message);
-        <% } else if(errorHandlingStrategy === 'throw') { %>
-        throw error;
-        <% } %>
-    }
-    return 0;
-});
+Promise.resolve()
+	.then(generate)
+	.catch(function (err) {
+		<% if(errorHandlingStrategy === 'warn') { %>
+		console.warn(err.message);
+		<% } else if(errorHandlingStrategy === 'throw') { %>
+		throw err;
+		<% } %>
+	});
