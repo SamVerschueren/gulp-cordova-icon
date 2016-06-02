@@ -47,5 +47,10 @@
   },
   "devDependencies": {
     "xo": "*"
+  },
+  "xo": {
+    "ignores": [
+      "hooks/before_prepare/icon.js"
+    ]
   }
 }
