@@ -2,7 +2,7 @@
 'use strict';
 var path = require('path');
 var fs = require('fs');
-<% if(locals.imageMagick) { %>
+<% if (locals.imageMagick) { %>
 var gm = require('gm').subClass({imageMagick: true});
 <% } else { %>
 var gm = require('gm');
