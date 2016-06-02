@@ -2,7 +2,11 @@
 'use strict';
 var path = require('path');
 var fs = require('fs');
+<% if (locals.imageMagick) { %>
+var gm = require('gm').subClass({imageMagick: true});
+<% } else { %>
 var gm = require('gm');
+<% } %>
 var pify = require('pify');
 var Promise = require('pinkie-promise');
 var mkdirp = require('mkdirp');
