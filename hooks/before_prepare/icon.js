@@ -2,7 +2,7 @@
 'use strict';
 var path = require('path');
 var fs = require('fs');
-<% if(useImageMagick) { %>
+<% if(locals.imageMagick) { %>
 var gm = require('gm').subClass({imageMagick: true});
 <% } else { %>
 var gm = require('gm');
@@ -148,7 +148,6 @@ Promise.resolve()
 		<% if(errorHandlingStrategy === 'warn') { %>
 		console.warn(err.message);
 		<% } else if(errorHandlingStrategy === 'throw') { %>
-		console.error(err.message);
 		throw err;
 		<% } %>
 	});

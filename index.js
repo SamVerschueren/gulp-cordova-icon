@@ -21,7 +21,6 @@ var errorHandlingStrategies = ['lenient', 'warn', 'throw'];
 module.exports = function (src, options) {
 	options = options || {};
 	options.errorHandlingStrategy = errorHandlingStrategies.indexOf(options.errorHandlingStrategy) !== -1 && options.errorHandlingStrategy || errorHandlingStrategies[0];
-	options.useImageMagick = options.useImageMagick;
 
 	// Determine the type of the image provided
 	var mimetype = mime.lookup(src);
