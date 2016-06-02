@@ -2,7 +2,11 @@
 'use strict';
 var path = require('path');
 var fs = require('fs');
+<% if(useImageMagick) { %>
+var gm = require('gm').subClass({imageMagick: true});
+<% } else { %>
 var gm = require('gm');
+<% } %>
 var pify = require('pify');
 var Promise = require('pinkie-promise');
 var mkdirp = require('mkdirp');
@@ -144,6 +148,7 @@ Promise.resolve()
 		<% if(errorHandlingStrategy === 'warn') { %>
 		console.warn(err.message);
 		<% } else if(errorHandlingStrategy === 'throw') { %>
+		console.error(err.message);
 		throw err;
 		<% } %>
 	});

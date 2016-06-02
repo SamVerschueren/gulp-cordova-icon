@@ -53,6 +53,13 @@ The error handling strategy of the process. This field has 3 possible values:
 * `warn`: any encountered error is logged as a warning on the console
 * `throw`: any encountered error is thrown and interrupts the Gulp stream
 
+##### useImageMagick
+
+Type: `boolean`  
+Defaults to : `false`
+
+Make use of ImageMagick instead of GraphicsMagick by default.
+
 ## Related
 
 See [`gulp-cordova`](https://github.com/SamVerschueren/gulp-cordova) for the full list of available packages.
