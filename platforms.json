@@ -29,7 +29,7 @@
     ]
   },
   "ios": {
-    "root": "{appName}/Resources/icons",
+    "root": "{appName}/Images.xcassets/AppIcon.appiconset",
     "icons": [
       {
         "file": "icon-40.png",
