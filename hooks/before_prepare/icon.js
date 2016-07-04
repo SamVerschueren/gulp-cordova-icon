@@ -124,26 +124,18 @@ function generate() {
 		source = path.join(__dirname, '../../res/icon.svg');
 		fn = 'density';
 	}
-	
-	var promises = function () {
-		var p = [];
-		
-		platform.icons.forEach(function (icon) {
-			var dest = path.join(root, icon.file);
 
-			if (!fs.existsSync(path.dirname(dest))) {
-				mkdirp.sync(path.dirname(dest));
-			}
+	return Promise.all(platform.icons.map(function (icon) {
+		var dest = path.join(root, icon.file);
 
-			var image = gm(source)[fn](icon.dimension, icon.dimension);
+		if (!fs.existsSync(path.dirname(dest))) {
+			mkdirp.sync(path.dirname(dest));
+		}
 
-			p.push(pify(image.write.bind(image), Promise)(dest));
-		});
-		
-		return p;
-	}();
+		var image = gm(source)[fn](icon.dimension, icon.dimension);
 
-	return Promise.all(promises).then(function () {
+		return pify(image.write.bind(image), Promise)(dest);
+	})).then(function () {
 		if (platform.xml) {
 			updateConfig(process.env.CORDOVA_PLATFORMS);
 		}
