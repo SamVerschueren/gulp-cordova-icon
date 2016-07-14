@@ -20,7 +20,7 @@ var errorHandlingStrategies = ['lenient', 'warn', 'throw'];
 // export the module
 module.exports = function (src, options) {
 	options = options || {};
-	options.errorHandlingStrategy = errorHandlingStrategies.indexOf(options.errorHandlingStrategy) !== -1 && options.errorHandlingStrategy || errorHandlingStrategies[0];
+	options.errorHandlingStrategy = errorHandlingStrategies.indexOf(options.errorHandlingStrategy) === -1 ? errorHandlingStrategies[0] : options.errorHandlingStrategy;
 
 	// Determine the type of the image provided
 	var mimetype = mime.lookup(src);
