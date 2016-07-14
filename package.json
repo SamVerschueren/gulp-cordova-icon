@@ -1,7 +1,7 @@
 {
   "name": "gulp-cordova-icon",
   "version": "0.5.0",
-  "description": "Add an icon to your cordova project.",
+  "description": "Generate all the icons for your Cordova build automatically",
   "license": "MIT",
   "main": "index.js",
   "author": {

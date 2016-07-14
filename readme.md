@@ -1,19 +1,21 @@
 # gulp-cordova-icon
 
-> Generates all the icons for your Cordova build automatically
+> Generate all the icons for your Cordova build automatically
+
 
 ## Installation
 
 ```
-npm install --save-dev gulp-cordova-icon
+$ npm install --save-dev gulp-cordova-icon
 ```
 
 This library depends on [GraphicsMagick](http://www.graphicsmagick.org/) or [ImageMagick](http://www.imagemagick.org/), so be sure to install
 one of those.
 
+
 ## Usage
 
-```javascript
+```js
 const create = require('gulp-cordova-create'),
 const icon = require('gulp-cordova-icon'),
 const android = require('gulp-cordova-android');
@@ -28,6 +30,7 @@ gulp.task('build', () => {
 ```
 
 When the project is build for a platform, the icon provided will be used as application icon. It will generate all the different sizes of the icon and puts them in the correct location.
+
 
 ## API
 
@@ -45,7 +48,7 @@ Type: `object`
 
 ##### errorHandlingStrategy
 
-Type: `string`  
+Type: `string`<br>
 Default: `lenient`
 
 The error handling strategy of the process. This field has 3 possible values:
@@ -55,15 +58,17 @@ The error handling strategy of the process. This field has 3 possible values:
 
 ##### imageMagick
 
-Type: `boolean`  
+Type: `boolean`<br>
 Default: `false`
 
 Use ImageMagick instead of GraphicsMagick.
+
 
 ## Related
 
 See [`gulp-cordova`](https://github.com/SamVerschueren/gulp-cordova) for the full list of available packages.
 
+
 ## License
 
-MIT © Sam Verschueren
+MIT © [Sam Verschueren](https://github.com/SamVerschueren)
