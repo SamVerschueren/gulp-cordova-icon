@@ -125,7 +125,7 @@ function generate() {
 		fn = 'density';
 	}
 
-	return Promise.all(platform.icons.forEach(function (icon) {
+	return Promise.all(platform.icons.map(function (icon) {
 		var dest = path.join(root, icon.file);
 
 		if (!fs.existsSync(path.dirname(dest))) {
