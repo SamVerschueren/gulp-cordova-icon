@@ -25,6 +25,10 @@
       {
         "file": "drawable-xxhdpi/icon.png",
         "dimension": 144
+      },
+      {
+        "file": "drawable-xxxhdpi/icon.png",
+        "dimension": 192
       }
     ]
   },
