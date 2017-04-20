@@ -29,6 +29,30 @@
       {
         "file": "drawable-xxxhdpi/icon.png",
         "dimension": 192
+      },
+      {
+        "file": "mipmap-ldpi/icon.png",
+        "dimension": 36
+      },
+      {
+        "file": "mipmap-mdpi/icon.png",
+        "dimension": 48
+      },
+      {
+        "file": "mipmap-hdpi/icon.png",
+        "dimension": 72
+      },
+      {
+        "file": "mipmap-xhdpi/icon.png",
+        "dimension": 96
+      },
+      {
+        "file": "mipmap-xxhdpi/icon.png",
+        "dimension": 144
+      },
+      {
+        "file": "mipmap-xxxhdpi/icon.png",
+        "dimension": 192
       }
     ]
   },
