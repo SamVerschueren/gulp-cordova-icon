@@ -3,33 +3,29 @@
   "version": "0.6.0",
   "description": "Generate all the icons for your Cordova build automatically",
   "license": "MIT",
-  "main": "index.js",
+  "repository": "SamVerschueren/gulp-cordova-icon",
   "author": {
     "name": "Sam Verschueren",
     "email": "sam.verschueren@gmail.com"
   },
-  "homepage": "https://github.com/SamVerschueren/gulp-cordova-icon",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SamVerschueren/gulp-cordova-icon.git"
-  },
-  "bugs": {
-    "url": "https://github.com/SamVerschueren/gulp-cordova-icon/issues"
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
   },
   "scripts": {
     "test": "xo"
   },
+  "files": [
+    "index.js",
+    "platforms.json",
+    "hooks"
+  ],
   "keywords": [
     "gulp",
     "gulpjs",
     "cordova",
     "icon",
     "gulp-cordova"
-  ],
-  "files": [
-    "index.js",
-    "platforms.json",
-    "hooks"
   ],
   "dependencies": {
     "fs-extra": "^0.26.2",
@@ -46,7 +42,7 @@
     "through2": "^2.0.0"
   },
   "devDependencies": {
-    "xo": "*"
+    "xo": "^0.16.0"
   },
   "xo": {
     "ignores": [
