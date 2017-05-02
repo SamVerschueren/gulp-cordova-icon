@@ -3,28 +3,28 @@
     "root": "res",
     "icons": [
       {
-        "file": "drawable/icon.png",
-        "dimension": 96
-      },
-      {
-        "file": "drawable-ldpi/icon.png",
+        "file": "mipmap-ldpi/icon.png",
         "dimension": 36
       },
       {
-        "file": "drawable-mdpi/icon.png",
+        "file": "mipmap-mdpi/icon.png",
         "dimension": 48
       },
       {
-        "file": "drawable-hdpi/icon.png",
+        "file": "mipmap-hdpi/icon.png",
         "dimension": 72
       },
       {
-        "file": "drawable-xhdpi/icon.png",
+        "file": "mipmap-xhdpi/icon.png",
         "dimension": 96
       },
       {
-        "file": "drawable-xxhdpi/icon.png",
+        "file": "mipmap-xxhdpi/icon.png",
         "dimension": 144
+      },
+      {
+        "file": "mipmap-xxxhdpi/icon.png",
+        "dimension": 192
       }
     ]
   },
