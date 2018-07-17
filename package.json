@@ -1,52 +1,52 @@
 {
-  "name": "gulp-cordova-icon",
-  "version": "0.7.0",
-  "description": "Generate all the icons for your Cordova build automatically",
-  "license": "MIT",
-  "repository": "SamVerschueren/gulp-cordova-icon",
-  "author": {
-    "name": "Sam Verschueren",
-    "email": "sam.verschueren@gmail.com"
-  },
-  "main": "index.js",
-  "engines": {
-    "node": ">=0.10.0"
-  },
-  "scripts": {
-    "test": "xo"
-  },
-  "files": [
-    "index.js",
-    "platforms.json",
-    "hooks"
-  ],
-  "keywords": [
-    "gulp",
-    "gulpjs",
-    "cordova",
-    "icon",
-    "gulp-cordova"
-  ],
-  "dependencies": {
-    "fs-extra": "^0.26.2",
-    "gulp-util": "^3.0.4",
-    "image-size": "^0.3.5",
-    "lodash": "^3.8.0",
-    "mem-fs": "^1.1.0",
-    "mem-fs-editor": "^2.0.4",
-    "mime-types": "^2.0.11",
-    "mkdirp": "^0.5.0",
-    "npmi": "^2.0.1-alpha",
-    "pify": "^2.3.0",
-    "pinkie-promise": "^2.0.0",
-    "through2": "^2.0.0"
-  },
-  "devDependencies": {
-    "xo": "^0.16.0"
-  },
-  "xo": {
-    "ignores": [
-      "hooks/before_prepare/icon.js"
-    ]
-  }
+	"name": "gulp-cordova-icon",
+	"version": "0.7.0",
+	"description": "Generate all the icons for your Cordova build automatically",
+	"license": "MIT",
+	"repository": "SamVerschueren/gulp-cordova-icon",
+	"author": {
+		"name": "Sam Verschueren",
+		"email": "sam.verschueren@gmail.com"
+	},
+	"main": "index.js",
+	"engines": {
+		"node": ">=0.10.0"
+	},
+	"scripts": {
+		"test": "xo"
+	},
+	"files": [
+		"index.js",
+		"platforms.json",
+		"hooks"
+	],
+	"keywords": [
+		"gulp",
+		"gulpjs",
+		"cordova",
+		"icon",
+		"gulp-cordova"
+	],
+	"dependencies": {
+		"fs-extra": "^0.26.2",
+		"gulp-util": "^3.0.4",
+		"image-size": "^0.3.5",
+		"lodash": "^3.8.0",
+		"mem-fs": "^1.1.0",
+		"mem-fs-editor": "^2.0.4",
+		"mime-types": "^2.0.11",
+		"mkdirp": "^0.5.0",
+		"npmi": "^2.0.1-alpha",
+		"pify": "^2.3.0",
+		"pinkie-promise": "^2.0.0",
+		"through2": "^2.0.0"
+	},
+	"devDependencies": {
+		"xo": "^0.16.0"
+	},
+	"xo": {
+		"ignores": [
+			"hooks/before_prepare/icon.js"
+		]
+	}
 }
