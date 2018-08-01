@@ -80,7 +80,11 @@ function updateConfig(target) {
 		var platformElement = doc.find('./platform/[@name="' + target + '"]');
 
 		if (platformElement) {
-			platformElement.findall('./icon').forEach(platformElement.remove);
+			var icons = platformElement.findall('./icon');
+
+			for (var i=0; i<icons.length; i++) {
+				platformElement.remove(icons[i]);
+			}
 		} else {
 			platformElement = new et.Element('platform');
 			platformElement.attrib.name = target;
@@ -91,7 +95,10 @@ function updateConfig(target) {
 		// Add all the icons
 		for(var i=0; i<platforms[target].icons.length; i++) {
 			var iconElement = new et.Element('icon');
-			iconElement.attrib.src = 'res/' + target + '/' + platforms[target].icons[i].file;
+			iconElement.attrib = {
+				...platforms[target].icons[i].attributes,
+				src: 'res/' + target + '/' + platforms[target].icons[i].file
+			};
 
 			platformElement.append(iconElement);
 		}

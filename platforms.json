@@ -1,30 +1,49 @@
 {
 	"android": {
+		"xml": true,
 		"root": "res",
 		"icons": [
 			{
 				"file": "mipmap-ldpi/icon.png",
-				"dimension": 36
+				"dimension": 36,
+				"attributes": {
+					"density": "ldpi"
+				}
 			},
 			{
 				"file": "mipmap-mdpi/icon.png",
-				"dimension": 48
+				"dimension": 48,
+				"attributes": {
+					"density": "mdpi"
+				}
 			},
 			{
 				"file": "mipmap-hdpi/icon.png",
-				"dimension": 72
+				"dimension": 72,
+				"attributes": {
+					"density": "hdpi"
+				}
 			},
 			{
 				"file": "mipmap-xhdpi/icon.png",
-				"dimension": 96
+				"dimension": 96,
+				"attributes": {
+					"density": "xhdpi"
+				}
 			},
 			{
 				"file": "mipmap-xxhdpi/icon.png",
-				"dimension": 144
+				"dimension": 144,
+				"attributes": {
+					"density": "xxhdpi"
+				}
 			},
 			{
 				"file": "mipmap-xxxhdpi/icon.png",
-				"dimension": 192
+				"dimension": 192,
+				"attributes": {
+					"density": "xxxhdpi"
+				}
 			}
 		]
 	},
