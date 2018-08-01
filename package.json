@@ -1,6 +1,6 @@
 {
   "name": "gulp-cordova-icon",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Generate all the icons for your Cordova build automatically",
   "license": "MIT",
   "repository": "SamVerschueren/gulp-cordova-icon",
